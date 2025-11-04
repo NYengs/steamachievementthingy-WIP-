@@ -13,7 +13,36 @@
         <li><a href="mc.html">Minecraft</a></li>
         <li><a href="steam.html">Steam</a></li>
         <li><a href="xbox.html">Xbox</a></li>
-      </ul>
-</body>
+    </ul>
 
+    <div class="search-container"></div>
+        <input type="text" id="username" placeholder="Enter Minecraft username">
+        <button onclick="searchPlayer()">Search</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function searchPlayer() {
+            const username = document.getElementById('username').value;
+            const resultDiv = document.getElementById('result');
+            
+            fetch(`https://playerdb.co/api/player/minecraft/${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        resultDiv.innerHTML = `
+                            <h2>Player Found:</h2>
+                            <p>Username: ${data.data.player.username}</p>
+                            <p>Player skin: <img src="https://crafatar.com/renders/body/${data.data.player.id}" alt="Player Skin"></p>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = '<p>Player not found</p>';
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = '<p>Error searching for player</p>';
+                });
+        }
+    </script>
+</body>
 </html>

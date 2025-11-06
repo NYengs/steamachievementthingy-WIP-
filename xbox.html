@@ -14,6 +14,31 @@
         <li><a href="steam.html">Steam</a></li>
         <li><a href="xbox.html">Xbox</a></li>
       </ul>
-</body>
+      <div class="search-container"></div>
+        <input type="text" id="username" placeholder="Enter Xbox username">
+        <button onclick="searchPlayer()">Search</button>
+    </div>
+    <div id="result"></div>
 
+    <script>
+        function searchPlayer() {
+            const username = document.getElementById('username').value;
+            const resultDiv = document.getElementById('result');
+            
+            fetch(`https://playerdb.co/api/player/xbox/${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        resultDiv.innerHTML = `
+                            <h2>Player Found:</h2>
+                            <p>Username: ${data.data.player.username}</p>
+                            <p>Avatar:<img src="${data.data.player.avatar}"></p>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = '<p>Player not found</p>';
+                    }
+                })
+        }
+    </script>
+</body>
 </html>

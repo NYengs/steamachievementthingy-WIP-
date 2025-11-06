@@ -24,8 +24,8 @@
         function searchPlayer() {
             const username = document.getElementById('username').value;
             const resultDiv = document.getElementById('result');
-            
             fetch(`https://playerdb.co/api/player/steam/${username}`)
+            fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=6B40FB7C09AF0102CF3E875EE5F84169&steamid=${username}&format=json`)
                 .then(response => response.json())
                 .then(data => {
                     if(data.success) {
@@ -34,15 +34,13 @@
                             <p>Username: ${data.data.player.username}</p>
                             <p>Avatar:<img src="${data.data.player.avatar}"width="100px" height="100px"></p>
                             <p>Country:${data.data.player.meta.loccountrycode}</p>
+                            <p>Owned Game Total: ${data.response.game_count}</p>
                             <p>Go to profile:<a href="${data.data.player.meta.profileurl}">Click here</a></p>
                         `;
                     } else {
                         resultDiv.innerHTML = '<p>Player not found</p>';
                     }
                 })
-                .catch(error => {
-                    resultDiv.innerHTML = '<p>Error searching for player</p>';
-                });
         }
     </script>
 </body>

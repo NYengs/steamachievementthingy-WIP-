@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft accounts</title>
@@ -34,15 +37,12 @@
                             <h2>Player Found:</h2>
                             <p>Username: ${data.data.player.username}</p>
                             <p>Player skin: <img src="https://crafatar.com/renders/body/${data.data.player.id}" alt="Player Skin"></p>
-                            <p>Download Skin: <a href="https://crafatar.com/skins/${data.data.player.id}" target="_blank">Click here</a></p>
+                            <p>Download Skin: <a href="${data.data.player.skin_texture}" target="_blank">Click here</a></p>
                         `;
                     } else {
                         resultDiv.innerHTML = '<p>Player not found</p>';
                     }
                 })
-                .catch(error => {
-                    resultDiv.innerHTML = '<p>Error searching for player</p>';
-                });
         }
     </script>
 </body>

@@ -36,23 +36,44 @@
                     }
                     const player = playerData.data.player;
                     const steamid = player.id || (player.meta && player.meta.steamId) || '';
-                    return fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=6B40FB7C09AF0102CF3E875EE5F84169&steamid=${username}&format=json`)
+                    resultDiv.innerHTML = `
+                        <h2>Player Found:</h2>
+                        <p>Username: ${player.username || 'Unknown'}</p>
+                        <p>Avatar: <img src="${player.avatar || ''}" width="100" height="100" alt="avatar"></p>
+                        <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
+                        <p>Owned Game Total: Loading...</p>
+                        <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
+                    `;
+
+                    if (!steamid) {
+                        resultDiv.innerHTML = `
+                            <h2>Player Found:</h2>
+                            <p>Username: ${player.username || 'Unknown'}</p>
+                            <p>Avatar: <img src="${player.avatar || ''}" width="100" height="100" alt="avatar"></p>
+                            <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
+                            <p>Owned Game Total: N/A</p>
+                            <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
+                        `;
+                        return;
+                    }
+
+                    const apiKey = 'B574963AC7270F3947C2E86F3859AE2C';
+                    return fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${encodeURIComponent(steamid)}&format=json`)
                         .then(response => response.json())
                         .then(gamesData => {
-                            const gameCount = gamesData && gamesData.response && gamesData.response.game_count ? gamesData.response.game_count : 'N/A';
                             resultDiv.innerHTML = `
                                 <h2>Player Found:</h2>
-                                <p>Username: ${player.username}</p>
-                                <p>Avatar: <img src="${player.avatar}" width="100" height="100" alt="avatar"></p>
+                                <p>Username: ${player.username || 'Unknown'}</p>
+                                <p>Avatar: <img src="${player.avatar || ''}" width="100" height="100" alt="avatar"></p>
                                 <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
-                                <p>Owned Game Total: ${gameCount}</p>
+                                <p>Owned Game Total: ${gamesData.response.game_count}</p>
                                 <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
                             `;
                         });
                 })
-                .catch(err => {
-                    console.error(err);
-                    resultDiv.innerHTML = '<p>Error fetching data. Check console for details.</p>';
+                .catch(error => {
+                    console.error(error);
+                    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
                 });
         }
     </script>

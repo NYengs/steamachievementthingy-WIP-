@@ -9,38 +9,51 @@
 <body>
     <ul>
         <h1>Steam accounts</h1>
-        <li><a href="type_stuff.html">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="mc.html">Minecraft</a></li>
         <li><a href="steam.html">Steam</a></li>
         <li><a href="xbox.html">Xbox</a></li>
       </ul>
-      <div class="search-container"></div>
+      <div class="search-container">
         <input type="text" id="username" placeholder="Enter Steam userID">
         <button onclick="searchPlayer()">Search</button>
-    </div>
+      </div>
     <div id="result"></div>
-
-    <script>
+       <script>
         function searchPlayer() {
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const resultDiv = document.getElementById('result');
+            if (!username) {
+                resultDiv.innerHTML = '<p>Please enter a Steam userID</p>';
+                return;
+            }
             fetch(`https://playerdb.co/api/player/steam/${username}`)
-            fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=6B40FB7C09AF0102CF3E875EE5F84169&steamid=${username}&format=json`)
                 .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-                        resultDiv.innerHTML = `
-                            <h2>Player Found:</h2>
-                            <p>Username: ${data.data.player.username}</p>
-                            <p>Avatar:<img src="${data.data.player.avatar}"width="100px" height="100px"></p>
-                            <p>Country:${data.data.player.meta.loccountrycode}</p>
-                            <p>Owned Game Total: ${data.response.game_count}</p>
-                            <p>Go to profile:<a href="${data.data.player.meta.profileurl}">Click here</a></p>
-                        `;
-                    } else {
+                .then(playerData => {
+                    if (!playerData.success) {
                         resultDiv.innerHTML = '<p>Player not found</p>';
+                        throw new Error('Player not found');
                     }
+                    const player = playerData.data.player;
+                    const steamid = player.id || (player.meta && player.meta.steamId) || '';
+                    return fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=6B40FB7C09AF0102CF3E875EE5F84169&steamid=${username}&format=json`)
+                        .then(response => response.json())
+                        .then(gamesData => {
+                            const gameCount = gamesData && gamesData.response && gamesData.response.game_count ? gamesData.response.game_count : 'N/A';
+                            resultDiv.innerHTML = `
+                                <h2>Player Found:</h2>
+                                <p>Username: ${player.username}</p>
+                                <p>Avatar: <img src="${player.avatar}" width="100" height="100" alt="avatar"></p>
+                                <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
+                                <p>Owned Game Total: ${gameCount}</p>
+                                <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
+                            `;
+                        });
                 })
+                .catch(err => {
+                    console.error(err);
+                    resultDiv.innerHTML = '<p>Error fetching data. Check console for details.</p>';
+                });
         }
     </script>
 </body>

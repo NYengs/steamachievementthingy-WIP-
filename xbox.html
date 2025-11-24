@@ -14,8 +14,13 @@
         <li><a href="steam.html">Steam</a></li>
         <li><a href="xbox.html">Xbox</a></li>
       </ul>
-      <script>
-        
+       <div class="search-container"></div>
+        <input type="text" id="username" placeholder="Enter Xbox nickname">
+        <button onclick="searchPlayer()">Search</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
         function searchPlayer() {
             const username = document.getElementById('username').value;
             const resultDiv = document.getElementById('result');
@@ -37,8 +42,7 @@
                     resultDiv.innerHTML = '<p>Error searching for player</p>';
                 });
         }
-    
-      </script>
+    </script>
 </body>
 
 </html>

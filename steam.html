@@ -58,7 +58,8 @@
                     }
 
                     const apiKey = 'B574963AC7270F3947C2E86F3859AE2C';
-                    return fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${encodeURIComponent(steamid)}&format=json`)
+                    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                    return fetch(`${proxyUrl}https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${encodeURIComponent(steamid)}&format=json`)
                         .then(response => response.json())
                         .then(gamesData => {
                             resultDiv.innerHTML = `

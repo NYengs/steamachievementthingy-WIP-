@@ -4,6 +4,21 @@ body{
   color:darkgray;
   margin:0;
 }
+p{
+  margin:10px auto;
+  color:rgb(191, 191, 191);
+  text-align:center;
+  max-width:800px;
+  box-sizing:border-box;
+  font-size:30px;
+}
+h2{
+  margin:10px auto;
+  text-align:center;
+  color:rgb(191, 191, 191);
+  max-width:800px;
+  font-size:35px;
+}
 h1{
   background-color: #333333;
   padding:10px;
@@ -32,4 +47,35 @@ ul li a {
 ul li a:hover {
   background-color: #111111;
   transition:0.5s;
+}
+button{
+  background-color: #333333;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  margin: 10px auto;
+  cursor: pointer;
+  transition: 0.5s;
+  max-width: 220px;
+  box-sizing: border-box;
+}
+
+button:hover {
+  background-color: #111111;
+  transition: 0.5s;
+}
+
+input{
+  padding:10px;
+  margin:10px auto;
+  border:none;
+  font-size:16px;
+  display:block;
+  max-width:400px;
+  width:calc(100% - 20px);
+  box-sizing:border-box;
 }

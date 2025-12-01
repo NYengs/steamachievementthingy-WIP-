@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steam accounts</title>
+    <title>DuoStatly - Steam accounts</title>
     <link rel="stylesheet" href="steamachstyle.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="mc.html">Minecraft</a></li>
         <li><a href="steam.html">Steam</a></li>
-        <li><a href="xbox.html">Xbox</a></li>
+        <li><a href="about.html">About</a></li>
       </ul>
       <div class="search-container">
         <input type="text" id="username" placeholder="Enter Steam userID">
@@ -39,20 +39,20 @@
                     resultDiv.innerHTML = `
                         <h2>Player Found:</h2>
                         <p>Username: ${player.username || 'Unknown'}</p>
-                        <p>Avatar: <img src="${player.avatar || ''}" width="100" height="100" alt="avatar"></p>
+                        <p>Avatar: <img src="${player.avatar || ''}" width="150" height="150" alt="avatar"></p>
                         <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
                         <p>Owned Game Total: Loading...</p>
-                        <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
+                        <p>Go to profile: <a href="${player.meta.profileurl}" target="_blank" rel="noopener">Click here</a></p>
                     `;
 
                     if (!steamid) {
                         resultDiv.innerHTML = `
                             <h2>Player Found:</h2>
                             <p>Username: ${player.username || 'Unknown'}</p>
-                            <p>Avatar: <img src="${player.avatar || ''}" width="100" height="100" alt="avatar"></p>
+                            <p>Avatar: <img src="${player.avatar || ''}" width="150" height="150" alt="avatar"></p>
                             <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
                             <p>Owned Game Total: N/A</p>
-                            <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
+                            <p>Go to profile: <a href="${player.meta.profileurl}" target="_blank" rel="noopener">Click here</a></p>
                         `;
                         return;
                     }
@@ -65,10 +65,10 @@
                             resultDiv.innerHTML = `
                                 <h2>Player Found:</h2>
                                 <p>Username: ${player.username || 'Unknown'}</p>
-                                <p>Avatar: <img src="${player.avatar || ''}" width="100" height="100" alt="avatar"></p>
+                                <p>Avatar: <img src="${player.avatar || ''}" width="150" height="150" alt="avatar"></p>
                                 <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
                                 <p>Owned Game Total: ${gamesData.response.game_count}</p>
-                                <p>Go to profile: <a href="${player.meta && player.meta.profileurl ? player.meta.profileurl : '#'}" target="_blank" rel="noopener">Click here</a></p>
+                                <p>Go to profile: <a href="${player.meta.profileurl}" target="_blank" rel="noopener">Click here</a></p>
                             `;
                         });
                 })

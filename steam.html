@@ -57,17 +57,24 @@
                         return;
                     }
 
-                    const apiKey = 'B574963AC7270F3947C2E86F3859AE2C';
-                    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-                    return fetch(`${proxyUrl}https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${encodeURIComponent(steamid)}&format=json`)
+                    // Calls our own Vercel serverless function instead of a
+                    // public CORS proxy. No API key here anymore — that now
+                    // lives server-side only, in the /api/steam function.
+                    return fetch(`/api/steam?steamid=${encodeURIComponent(steamid)}`)
                         .then(response => response.json())
                         .then(gamesData => {
+                            if (gamesData.error) {
+                                throw new Error(gamesData.error);
+                            }
+                            const gameCount = gamesData.response && gamesData.response.game_count !== undefined
+                                ? gamesData.response.game_count
+                                : 'Unknown (profile may be private)';
                             resultDiv.innerHTML = `
                                 <h2>Player Found:</h2>
                                 <p>Username: ${player.username || 'Unknown'}</p>
                                 <p>Avatar: <img src="${player.avatar || ''}" width="150" height="150" alt="avatar"></p>
                                 <p>Country: ${ (player.meta && player.meta.loccountrycode) ? player.meta.loccountrycode : 'Unknown' }</p>
-                                <p>Owned Game Total: ${gamesData.response.game_count}</p>
+                                <p>Owned Game Total: ${gameCount}</p>
                                 <p>Go to profile: <a href="${player.meta.profileurl}" target="_blank" rel="noopener">Click here</a></p>
                             `;
                         });
